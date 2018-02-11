@@ -43,7 +43,8 @@ function simple_php_captcha($config = array()) {
         'shadow' => true,
         'shadow_color' => '#fff',
         'shadow_offset_x' => -1,
-        'shadow_offset_y' => 1
+        'shadow_offset_y' => 1,
+		'image_src' => null
     );
 
     // Overwrite defaults with custom config values
@@ -69,7 +70,9 @@ function simple_php_captcha($config = array()) {
     }
 
     // Generate HTML for image src
-    if ( strpos($_SERVER['SCRIPT_FILENAME'], $_SERVER['DOCUMENT_ROOT']) ) {
+	if($captcha_config['image_src'] !== null) {
+		$image_src = $captcha_config['image_src'] . '?_CAPTCHA&amp;t=' . urlencode(microtime());
+    } else if ( strpos($_SERVER['SCRIPT_FILENAME'], $_SERVER['DOCUMENT_ROOT']) ) {
         $image_src = substr(__FILE__, strlen( realpath($_SERVER['DOCUMENT_ROOT']) )) . '?_CAPTCHA&amp;t=' . urlencode(microtime());
         $image_src = '/' . ltrim(preg_replace('/\\\\/', '/', $image_src), '/');
     } else {
